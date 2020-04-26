@@ -1,0 +1,425 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<style>
+
+
+/*#div1, #div2,#div3, #div4,#div5, #div6,#div7, #div8,#div9 {
+  float: left;
+  width: 80px;
+  height: 100px;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid black;
+}
+*/
+</style>
+
+
+<script>
+
+</script>
+
+</head>
+
+
+
+
+
+<body>
+
+    
+   
+    <p><input type="button" id="button" value="press to show table with eliminated fruits" />  </p>
+
+    <table>>
+
+        <tr>
+
+            <td>
+                <p id="space1"> </p>
+            </td>
+
+            <td>
+
+                <p id="space2"> </p>
+            </td>
+
+            <td>
+
+                <p id="space3"> </p>
+            </td>
+
+            <td>
+
+                <p id="space4">__</p>
+            </td>
+
+            
+        </tr>
+    </table>
+
+
+
+
+    <script>
+
+     array=["apple","orange","watermelon","strawberry","grape"];
+     fruitarray=[];
+     h=7;
+     function allowDrop(ev) {
+       ev.preventDefault();
+     }
+     function drag(ev) {
+       ev.dataTransfer.setData("img", ev.target.id);
+       ev.dataTransfer.setData("div", ev.target.parentNode.id);  
+     }
+
+     function drop(ev) {
+       ev.preventDefault();
+       var data    = ev.dataTransfer.getData("img");
+       var origdiv = ev.dataTransfer.getData("div");
+       var targetnode;
+       if(ev.target.id.includes("img")) {
+          targetnode = ev.target.parentNode;
+        }
+       if(ev.target.id.includes("div")) {
+          targetnode = ev.target;
+        }
+       for(i=0;i<targetnode.childNodes.length;i++){
+         if(targetnode.childNodes[i].nodeName=="IMG") {
+           odiv = document.getElementById(origdiv);
+           odiv.appendChild(document.getElementById(targetnode.childNodes[i].id));
+           break;
+           }
+        }   
+   
+        targetnode.appendChild(document.getElementById(data));
+        var sss="<table align=center border=1>";
+        for(x=0; x<h; x=x+1)
+        {
+          sss = sss + "<tr>";
+          for(y=0; y<h; y=y+1)
+          {
+             sss = sss + "<td>";
+             a="div"+(x*h+y+1);
+             Dnode = document.getElementById(a);
+             // sss = Dnode.id + " ";
+             // sss = sss + Dnode.childNodes.length + " ";
+             for(i=0;i<Dnode.childNodes.length;i++)
+             {
+               if(Dnode.childNodes[i].nodeName=="IMG")
+                {
+                   //sss = sss + Dnode.childNodes[i].id  + " ";
+                   //sss = sss + Dnode.childNodes[i].src + " ";
+                   lll = Dnode.childNodes[i].src.length;
+                   ccc = Dnode.childNodes[i].src.substr(22,lll-22-4);
+                   sss = sss + ccc + " ";
+                   fruitarray[x*h+y] = ccc;
+                }
+             }
+             sss = sss + "</td>";
+          }
+          sss = sss + "</tr>";
+        }
+        document.getElementById("space3").innerHTML = sss;
+    }
+
+    function check(u,v) 
+    {
+              q=0;
+              for(x=0; x<h; x=x+1)   // for every row
+              {  
+                for(y=0; y<h; y=y+1)   // for every column
+                {
+                // loop to look eastward for cell (x,y+k) where it is not the same as cell (x,y)
+                  g=0;
+                  for(z=1; z<=(h-1)-y; z=z+1)
+                  {
+                    nn = u[x*h+y].localeCompare(u[x*h+y+z]);
+                    if(nn!=0)
+                    {
+                         break;
+                    }
+                    else
+                    {
+                       g=g+1;
+                       q=q+1;
+                    }
+                  }
+               // numberarray=numberarray+(y+a);
+                     if(g>=2)
+                     {
+                       for(b=0; b<=g; b=b+1)
+                      {
+                        v.push(x*h+y+b) ;
+                      } 
+                     }
+                }
+              }
+
+             for(x=0; x<h; x=x+1)   // for every row
+           {  
+              for(y=0; y<h; y=y+1)   // for every column
+              {
+               g=0;
+               for(z=1; z<=(h-1)-x; z=z+1)
+               {
+                nn = u[x*h+y].localeCompare(u[x*h+y+(z*h)]);
+                    if(nn!=0)
+                    {
+                         break;
+                    }
+                    else
+                    {
+                       g=g+1;
+                       q=q+1;
+                    }
+               }
+
+               
+                if(g>=2)
+                {
+                   for(b=0; b<=g; b=b+1)
+                   {
+                    v.push(x*h+y+(b*h)) ;
+                   }
+                }
+            }
+        }
+
+
+        for(x=0; x<h; x=x+1)   // for every row
+        {  
+            for(y=0; y<h; y=y+1)   // for every column
+            {
+               g=0;
+               for(z=1; z<=(h-1)-y; z=z+1)
+               {
+                nn = u[x*h+y].localeCompare(u[x*h+y+(z*h)+z]);
+                    if(nn!=0)
+                    {
+                         break;
+                    }
+                    else
+                    {
+                       g=g+1;
+                       q=q+1;
+                    }
+               }
+                if(g>=2)
+                {
+                   for(b=0; b<=g; b=b+1)
+                   {
+                       v.push(x*h+y+(b*h)+b) ;
+                   }
+                }
+            }
+        }
+
+
+        for(x=0; x<h; x=x+1)   // for every row
+        {  
+            for(y=0; y<h; y=y+1)   // for every column
+            {
+               g=0;
+               for(z=1; z<=y; z=z+1)
+               {
+                nn = u[x*h+y].localeCompare(u[x*h+y+(z*h)-z]);
+                    if(nn!=0)
+                    {
+                         break;
+                    }
+                    else
+                    {
+                        g=g+1;
+                        q=q+1;
+                    }
+               }
+
+               
+                if(g>=2)
+                {
+                   for(b=0; b<=g; b=b+1)
+                   {
+                       v.push(x*h+y+(b*h)-b) ;
+                   }
+                }
+            }
+        }
+
+        
+        return v;
+
+ }
+
+    function eliminate(j,l)
+    {
+        for(x=0; x<l.length; x=x+1)
+        {
+        j[l[x]]="na";
+        }
+        return j;
+    }
+
+    function dropping(r,o)
+    {
+        for(x=0; x<h; x=x+1)
+        {
+            b=0;
+            for(y=0; y<=o; y=y+1)
+            {
+                if(r[o*h+x-(y*h)]!="na")
+                {
+                break;
+                }
+                else
+                {
+                    b=b+1;
+                }
+            }
+
+            //  c=a-b;
+            for(z=o; z>=b; z=z-1)
+            {
+                r[z*h+x]=r[(z-b)*h+x];
+            }
+            
+            for(w=0; w<b; w=w+1)
+            {
+                r[w*h+x]="na";
+            }
+            
+        }
+
+        return r;
+    }
+
+
+
+    function fill(s)
+    {
+        for(x=0; x<h; x=x+1)
+       {
+          for(y=0; y<h; y=y+1)
+         {
+              if(s[x*h+y]=="na")
+             {
+                f=parseInt(Math.random()*array.length);
+                s[x*h+y]=array[f];
+             }
+         }
+        }
+
+        return s;
+    
+   }
+
+
+
+    var table='<table align=center border=1>';        
+    for(x=0; x<h; x=x+1)
+    {   table=table+'<tr>';
+        for(y=0; y<h; y=y+1)
+        {   a=parseInt(Math.random()*array.length);
+            fruitarray.push(array[a]);   
+            table=table+'<td>'+
+            '<div id= "div'+(x*h+y+1)+'" ondrop="drop(event)" ondragover="allowDrop(event)">'+
+            '<img src=' + array[a] + '.jpg draggable="true" ondragstart="drag(event)" ' + 
+            ' id="img'+(x*h+y+1)+'" width="45" height="45">'+
+            '</div>'+
+            '</td>';
+        }
+        table=table+'</tr>';
+    }
+    table=table+'</table>';
+    document.getElementById("space1").innerHTML = table;
+
+    
+    
+    $("#button").click( function() {
+        document.getElementById("space4").innerHTML = "hello";
+        a=h;  
+        e=h;
+        markedarray=[1];
+        
+        function show()
+        {   
+            if(markedarray.length!=0)
+            {
+                if(a==h)
+                {   markedarray=[];
+                    markedarray=check(fruitarray,markedarray);
+                    fruitarray=eliminate(fruitarray,markedarray);
+                }
+                else
+                {
+                    dropping(fruitarray,a);
+                }
+                a=a-1;
+                e=e-1;
+                if(a<0)
+                {
+                  a=0;
+                }
+                if(e==(-2))
+                { a=h;
+                  e=h;
+                  fill(fruitarray);
+                }
+     
+                table='<table align=center border=1>';
+                for(x=0; x<h; x=x+1)
+                {   table=table+'<tr>';
+                    for(y=0; y<h; y=y+1)
+                    {       
+                        if(fruitarray[x*h+y]!="na") 
+                        {
+                            table=table+'<td>'+'<img src='+fruitarray[x*h+y]+'.jpg ' + 'width="45" height="45">'+'</td>';
+                        }  
+                        else
+                        {
+                            table=table+'<td>'+fruitarray[x*h+y]+'</td>';
+                        }
+                    }
+                    table=table+'</tr>'; 
+                }
+                table=table+'</table>';
+                document.getElementById("space1").innerHTML = table;
+            }
+            else
+            {  clearInterval(timer);
+                
+                 var table='<table align=center border=1>';  
+                for(x=0; x<h; x=x+1)
+                {   table=table+'<tr>';
+                    for(y=0; y<h; y=y+1)
+                    {      
+                        table=table+'<td>'+
+                        '<div id= "div'+(x*h+y+1)+'" ondrop="drop(event)" ondragover="allowDrop(event)">'+
+                        '<img src=' + fruitarray[x*h+y] + '.jpg draggable="true" ondragstart="drag(event)" ' + 
+                        ' id="img'+(x*h+y+1)+'" width="45" height="45">'+
+                        '</div>'+
+                        '</td>';
+                    }
+                    table=table+'</tr>';
+                }
+                table=table+'</table>';
+                document.getElementById("space1").innerHTML = table;
+           }
+       
+        }//show
+
+   
+    timer = setInterval(show, 1000);  
+
+});
+
+
+</script>
+
+</body>
+
+</html>
